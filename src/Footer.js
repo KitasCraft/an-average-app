@@ -1,9 +1,16 @@
+import { Link } from "react-router-dom";
+
 function Footer() {
     return (
         <>
-            <footer>
+            <footer className="Footer">
                 <p>Copyright Little Lemon 2025. All Rights Reserved.</p>
-                <p><a href="/contact-us">Contact Us</a></p>
+                <br />
+                <Link to="/contact-us">
+                    <p style={{
+                        color: "white"
+                    }}>Contact us.</p>
+                </Link>
             </footer>
         </>
     );
