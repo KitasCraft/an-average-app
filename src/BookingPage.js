@@ -1,20 +1,21 @@
 import BookingForm from "./BookingForm";
 import { useReducer } from "react";
-import { submitAPI } from "./api";
-import { Route, Router, Routes } from "react-router-dom";
+import { fetchAPI, submitAPI } from "./api";
+import { Route, Router, Routes } from "react-router";
 import BookingConfirm from "./BookingConfirm";
 
 function BookingPage() {
+    const today = new Date();
+
     const reducer = (state, action) => {
-        if (action.date === "2025-12-25") return ["find her."]
-        return action.times;
+        return fetchAPI(action.date);
     }
     const initializeTimes = () => {
-        return ["17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
+        return fetchAPI(today);
     }
     const [availableTimes, dispatch] = useReducer(reducer, undefined, initializeTimes)
-    const updateTimes = (date, times) => {
-        return dispatch({ date: date, times: times })
+    const updateTimes = (date) => {
+        return dispatch({ date: date })
     }
     const submitForm = (formData) => {
         return submitAPI(formData)

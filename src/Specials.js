@@ -1,5 +1,5 @@
 import DishCard from "./DishCard";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 function Specials() {
     return (

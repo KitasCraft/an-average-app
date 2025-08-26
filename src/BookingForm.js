@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { fetchAPI } from "./api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 function BookingForm({bookingTimes, updateTimes, submit}) {
     const navigate = useNavigate();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0)
 
     const [name, setName] = useState("");
     const [date, setDate] = useState("");
@@ -13,7 +14,7 @@ function BookingForm({bookingTimes, updateTimes, submit}) {
 
     const [error, setError] = useState({
         name: true,
-        date: true,
+        date: false,
         time: true
     })
     const [touched, setTouched] = useState({
@@ -42,7 +43,7 @@ function BookingForm({bookingTimes, updateTimes, submit}) {
     useEffect(() => {
         if (!date) return;
         const formattedDate = new Date(date)
-        updateTimes(date, fetchAPI(formattedDate))
+        updateTimes(formattedDate)
     }, [date])
 
     return (
@@ -73,19 +74,23 @@ function BookingForm({bookingTimes, updateTimes, submit}) {
                 id="res-date"
                 value={date}
                 onChange={(e) => {
-                    setDate(e.target.value)
-                    if (error.date === true) {
+                    setDate(e.target.value);
+                    const selectedDate = new Date(e.target.value)
+                    if (!(e.target.value) || selectedDate < today) {
+                        setError({...error, date: true})
+                    }
+                    else {
                         setError({...error, date: false})
                     }
                 }}
                 onBlur={() => {
                     setTouched({...touched, date: true})
-                    if (!date) {
+                    if (!(date)) {
                         setError({...error, date: true})
                     }
                 }}
             />
-            {error.date && touched.date && <p style={{color: "red", fontSize: 11}}>Please select a date</p>}
+            {error.date && touched.date && <p style={{color: "red", fontSize: 11}}>Please select a valid date</p>}
             <br />
             <label htmlFor="res-time">Choose time</label>
             <select
